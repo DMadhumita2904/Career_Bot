@@ -113,8 +113,8 @@ for message in st.session_state.messages:
     else:
         st.markdown(f'<div class="bot-message">{message["text"]}</div>', unsafe_allow_html=True)
 
-# User Input Box at the Bottom
-user_query = st.text_input("Type your message and press Enter", key="user_input")
+# Fix: Use a unique key to prevent duplicate key error
+user_query = st.text_input("Type your message and press Enter", key="new_user_input")
 
 if user_query:
     # Add user message to session state
@@ -131,6 +131,6 @@ if user_query:
     # Add bot response to session state
     st.session_state.messages.append({"role": "bot", "text": answer})
 
-    # Refresh page to show new messages
-    st.text_input("Type your message and press Enter", key="user_input", value="", on_change=None)
-
+    # **Fix:** Clear input field properly
+    st.session_state["new_user_input"] = ""
+    st.rerun()  # Refresh UI for real-time chat experience
