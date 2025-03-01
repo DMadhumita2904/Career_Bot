@@ -20,6 +20,7 @@ def get_gemini_response(user_input):
     return response.text if response else "I'm sorry, I couldn't generate a response."
 
 # CSS for background color animation
+# Replace the body selector in CSS with .stApp
 st.markdown(
     """
     <style>
@@ -32,8 +33,9 @@ st.markdown(
         100% {background-color: #E0F7FA;}
     }
     
-    body {
+    .stApp {
         animation: backgroundAnimation 10s infinite alternate;
+        background: transparent !important;
     }
     
     .center {
@@ -44,7 +46,6 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
-
 # Centered GIF with reduced size
 st.markdown(
     """
