@@ -24,7 +24,7 @@ genai.configure(api_key=GEMINI_API_KEY)
 
 def get_gemini_response(question):
     """Fetch additional insights from Gemini AI using Gemini Flash 1.5."""
-    model = genai.GenerativeModel("gemini-flash-1.5")
+    model = genai.GenerativeModel("gemini-1.5-flash")
     response = model.generate_content(question)
     return response.text if response else "I'm unable to fetch additional details at the moment."
 
