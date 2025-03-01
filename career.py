@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import google.generativeai as genai
+import random
 
 # Load the dataset
 @st.cache_data
@@ -19,9 +20,38 @@ def get_gemini_response(user_input):
     response = model.generate_content(user_input)
     return response.text if response else "I'm sorry, I couldn't generate a response."
 
-# Streamlit UI
-st.image("https://cdn.pixabay.com/animation/2022/10/06/09/57/09-57-46-893_512.gif", use_container_width=True)
-st.title("Career Guidance Chatbot")
+# Light colors for changing background
+light_colors = ["#FCE4EC", "#E3F2FD", "#E8F5E9", "#FFFDE7", "#F3E5F5", "#E0F7FA", "#FFEBEE"]
+
+# Set random background color
+def set_background():
+    color = random.choice(light_colors)
+    st.markdown(
+        f"""
+        <style>
+        body {{
+            background-color: {color};
+            transition: background-color 1s ease-in-out;
+        }}
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+set_background()
+
+# Reduce GIF size and center it
+st.markdown(
+    """
+    <div style="text-align: center;">
+        <img src="https://cdn.pixabay.com/animation/2022/10/06/09/57/09-57-46-893_512.gif" width="250">
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
+# Chatbot UI
+st.title("🚀 Career Guidance Chatbot 🎯")
 st.write("Ask me career-related questions!")
 
 # User Input
