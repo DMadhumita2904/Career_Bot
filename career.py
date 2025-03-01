@@ -19,29 +19,55 @@ def get_gemini_response(user_input):
     response = model.generate_content(user_input)
     return response.text if response else "I'm sorry, I couldn't generate a response."
 
-# Inject CSS for a smooth, light gradient animated background
-st.markdown("""
-    <style>
-    @keyframes gradientChange {
-        0% { background: linear-gradient(135deg, #FFD3A5, #FD6585); } /* Soft Peach to Pink */
-        25% { background: linear-gradient(135deg, #A1C4FD, #C2E9FB); } /* Light Blue to Sky Blue */
-        50% { background: linear-gradient(135deg, #FFDEE9, #B5FFFC); } /* Light Pink to Soft Aqua */
-        75% { background: linear-gradient(135deg, #FAD961, #FFD452); } /* Warm Yellow */
-        100% { background: linear-gradient(135deg, #FFD3A5, #FD6585); } /* Back to Soft Peach */
-    }
-    
-    .stApp {
-        animation: gradientChange 3s infinite alternate;
-        background-size: cover;
-    }
-    </style>
-""", unsafe_allow_html=True)
+# More gradient colors for dynamic background
+gradient_colors = [
+    "#FFDEE9, #B5FFFC",  # Light pink to blue
+    "#A1C4FD, #C2E9FB",  # Soft blue to white
+    "#FFEFBA, #FFFFFF",  # Light yellow to white
+    "#FAACA8, #DDD6F3",  # Soft red to purple
+    "#FAD961, #F76B1C",  # Orange gradient
+    "#FDCB82, #FF9A8B",  # Peach to soft pink
+    "#A18CD1, #FBC2EB",  # Purple to pink
+    "#F7CE68, #FBAB7E",  # Gold to soft orange
+    "#70F570, #49C628",  # Bright green to deep green
+    "#30Cfd0, #330867",  # Turquoise to deep blue
+    "#667eea, #764ba2",  # Blue to purple
+    "#FF9A9E, #FAD0C4",  # Soft red to peach
+]
 
-# Reduce GIF size and center it
+# Inject CSS for animated gradient background
+st.markdown(
+    f"""
+    <style>
+    @keyframes gradientChange {{
+        0%   {{ background: linear-gradient(135deg, {gradient_colors[0]}); }}
+        8%   {{ background: linear-gradient(135deg, {gradient_colors[1]}); }}
+        16%  {{ background: linear-gradient(135deg, {gradient_colors[2]}); }}
+        25%  {{ background: linear-gradient(135deg, {gradient_colors[3]}); }}
+        33%  {{ background: linear-gradient(135deg, {gradient_colors[4]}); }}
+        41%  {{ background: linear-gradient(135deg, {gradient_colors[5]}); }}
+        50%  {{ background: linear-gradient(135deg, {gradient_colors[6]}); }}
+        58%  {{ background: linear-gradient(135deg, {gradient_colors[7]}); }}
+        66%  {{ background: linear-gradient(135deg, {gradient_colors[8]}); }}
+        75%  {{ background: linear-gradient(135deg, {gradient_colors[9]}); }}
+        83%  {{ background: linear-gradient(135deg, {gradient_colors[10]}); }}
+        91%  {{ background: linear-gradient(135deg, {gradient_colors[11]}); }}
+        100% {{ background: linear-gradient(135deg, {gradient_colors[0]}); }}
+    }}
+    .stApp {{
+        animation: gradientChange 5s infinite alternate;
+        background-size: cover;
+    }}
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+# Display the animated GIF properly
 st.markdown(
     """
     <div style="text-align: center;">
-        <img src="https://i.pinimg.com/originals/1f/f3/3e/1ff33ede4825194fdbcf0f9b5e27dc93.gif" width="250">
+        <img src="https://i.pinimg.com/originals/1f/f3/3e/1ff33ede4825194fdbcf0f9b5e27dc93.gif" width="300" height="300">
     </div>
     """,
     unsafe_allow_html=True
