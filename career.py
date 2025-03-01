@@ -30,7 +30,7 @@ except Exception as e:
 def get_gemini_response(question):
     """Fetch additional insights from Gemini AI with error handling."""
     try:
-        model = genai.GenerativeModel("gemini-pro")
+        model = genai.GenerativeModel("gemini-1.5-flash")
         response = model.generate_content(
             question,
             generation_config={"temperature": 0.5},
