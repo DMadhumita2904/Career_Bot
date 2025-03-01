@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import google.generativeai as genai
-import random
 
 # Load the dataset
 @st.cache_data
@@ -20,25 +19,22 @@ def get_gemini_response(user_input):
     response = model.generate_content(user_input)
     return response.text if response else "I'm sorry, I couldn't generate a response."
 
-# Light colors for changing background
-light_colors = ["#FCE4EC", "#E3F2FD", "#E8F5E9", "#FFFDE7", "#F3E5F5", "#E0F7FA", "#FFEBEE"]
-
-# Set random background color
-def set_background():
-    color = random.choice(light_colors)
-    st.markdown(
-        f"""
-        <style>
-        body {{
-            background-color: {color};
-            transition: background-color 1s ease-in-out;
-        }}
-        </style>
-        """,
-        unsafe_allow_html=True,
-    )
-
-set_background()
+# Inject JavaScript to change background color dynamically
+st.components.v1.html(
+    """
+    <script>
+    let colors = ["#FCE4EC", "#E3F2FD", "#E8F5E9", "#FFFDE7", "#F3E5F5", "#E0F7FA", "#FFEBEE"];
+    let index = 0;
+    function changeColor() {
+        document.body.style.transition = "background-color 2s ease-in-out";
+        document.body.style.backgroundColor = colors[index];
+        index = (index + 1) % colors.length;
+    }
+    setInterval(changeColor, 3000);
+    </script>
+    """,
+    height=0,
+)
 
 # Reduce GIF size and center it
 st.markdown(
