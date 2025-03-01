@@ -35,7 +35,7 @@ gradient_colors = [
     "#FF9A9E, #FAD0C4",  # Soft red to peach
 ]
 
-# Inject CSS for animated gradient background (15s transition time)
+# Inject CSS for animated gradient background (15s transition time) and chat bubble styling
 st.markdown(
     f"""
     <style>
@@ -58,6 +58,33 @@ st.markdown(
         animation: gradientChange 15s infinite alternate;
         background-size: cover;
     }}
+    
+    /* Chat bubbles */
+    .bot-message {{
+        background-color: #f0f0f5;
+        color: #333;
+        padding: 10px 15px;
+        border-radius: 10px;
+        width: fit-content;
+        max-width: 70%;
+        margin: 10px 0;
+        text-align: left;
+        font-family: Arial, sans-serif;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    }}
+    
+    .user-message {{
+        background-color: #0078ff;
+        color: white;
+        padding: 10px 15px;
+        border-radius: 10px;
+        width: fit-content;
+        max-width: 70%;
+        margin: 10px 0 10px auto;
+        text-align: right;
+        font-family: Arial, sans-serif;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+    }}
     </style>
     """,
     unsafe_allow_html=True
@@ -77,10 +104,17 @@ st.markdown(
 st.title("🚀 Career Guidance Chatbot 🎯")
 st.write("Ask me career-related questions!")
 
+# Initialize chat history
+if "messages" not in st.session_state:
+    st.session_state.messages = []
+
 # User Input
 user_query = st.text_input("Type your question here:")
 
 if user_query:
+    # Add user message to session state
+    st.session_state.messages.append({"role": "user", "text": user_query})
+
     # Check if the question exists in the dataset
     matched_row = data[data["Question"].str.lower() == user_query.lower()]
     
@@ -89,5 +123,12 @@ if user_query:
     else:
         answer = get_gemini_response(user_query)
 
-    st.write("### Response:")
-    st.write(answer)
+    # Add bot response to session state
+    st.session_state.messages.append({"role": "bot", "text": answer})
+
+# Display chat messages with proper alignment
+for message in st.session_state.messages:
+    if message["role"] == "user":
+        st.markdown(f'<div class="user-message">{message["text"]}</div>', unsafe_allow_html=True)
+    else:
+        st.markdown(f'<div class="bot-message">{message["text"]}</div>', unsafe_allow_html=True)
