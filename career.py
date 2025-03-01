@@ -1,93 +1,41 @@
 import streamlit as st
 import pandas as pd
 import google.generativeai as genai
-from datetime import datetime
 
-# Set Streamlit page configuration
-st.set_page_config(page_title="Career Guidance Chatbot", page_icon="🎯", layout="centered")
-
-# Load the dataset with caching
+# Load the dataset
 @st.cache_data
 def load_data():
     return pd.read_csv("profession_questions_answers.csv")
 
-df = load_data()
+data = load_data()
 
-def get_predefined_answer(profession, question):
-    """Fetch the predefined answer from the dataset."""
-    row = df[(df["Profession"] == profession) & (df["Question"] == question)]
-    return row["Answer"].values[0] if not row.empty else None
+# Directly embedding the Gemini API Key
+API_KEY = "AIzaSyAYfcTAFba5mn5LXw4UNNfnBvQEgmNbAos"  # Replace with your actual Gemini API Key
+genai.configure(api_key=API_KEY)
 
-# Set up Gemini API directly with your key
-YOUR_API_KEY = "AIzaSyAYfcTAFba5mn5LXw4UNNfnBvQEgmNbAos"  # 🔴 Replace with your actual key
-try:
-    genai.configure(api_key=YOUR_API_KEY)
-except Exception as e:
-    st.error(f"API configuration failed: {str(e)}")
-    st.stop()
+def get_gemini_response(user_input):
+    """Function to get response from the Gemini API"""
+    model = genai.GenerativeModel("gemini-1.5-flash")
+    response = model.generate_content(user_input)
+    return response.text if response else "I'm sorry, I couldn't generate a response."
 
-@st.cache_data(ttl=3600)
-def get_gemini_response(question):
-    """Fetch additional insights from Gemini AI with error handling."""
-    try:
-        model = genai.GenerativeModel("gemini-1.5-flash")
-        response = model.generate_content(
-            question,
-            generation_config={"temperature": 0.5},
-            request_options={"timeout": 10}
-        )
-        return response.text
-    except Exception as e:
-        return f"⚠️ Error: {str(e)}"
+# Streamlit UI
+st.title("Career Guidance Chatbot")
+st.write("Ask me career-related questions!")
 
-# Streamlit UI remains the same
-st.markdown("""
-    <style>
-    .main {background-color: #f4f4f4;}
-    .stTextInput, .stSelectbox {border-radius: 10px;}
-    .stButton button {background-color: #4CAF50; color: white; font-size: 18px; padding: 10px;}
-    .response-section {padding: 20px; border-radius: 10px; margin: 15px 0;}
-    </style>
-""", unsafe_allow_html=True)
+# User Input
+user_query = st.text_input("Type your question here:")
 
-st.title("🎯 Career Guidance Chatbot")
-st.caption("Get expert insights and guidance for your career path.")
-
-st.markdown("""
-    ### 🔍 How It Works:
-    1. Select a profession from the dropdown
-    2. Choose a career-related question
-    3. Get expert advice and AI-powered insights!
-""")
-
-# User input
-profession = st.selectbox("🔹 Choose a profession:", df["Profession"].unique())
-question = st.selectbox("🔹 Choose a question:", df[df["Profession"] == profession]["Question"].unique())
-
-if st.button("✨ Get Answer ✨"):
-    start_time = datetime.now()
+if user_query:
+    # Check if the question exists in the dataset
+    matched_row = data[data["Question"].str.lower() == user_query.lower()]
     
-    predefined_answer = get_predefined_answer(profession, question)
-    
-    col1, col2 = st.columns(2)
-    
-    with col1:
-        st.markdown("<div class='response-section' style='background-color: #e8f5e9;'>", unsafe_allow_html=True)
-        st.subheader("📌 Predefined Answer:")
-        st.write(predefined_answer)
-        st.markdown("</div>", unsafe_allow_html=True)
-    
-    with col2:
-        st.markdown("<div class='response-section' style='background-color: #e3f2fd;'>", unsafe_allow_html=True)
-        st.subheader("🤖 AI Insights:")
-        with st.spinner("Generating additional insights..."):
-            gemini_answer = get_gemini_response(question)
-            st.write(gemini_answer)
-        st.markdown(f"⏱️ Response time: {(datetime.now() - start_time).total_seconds():.1f}s")
-        st.markdown("</div>", unsafe_allow_html=True)
+    if not matched_row.empty:
+        answer = matched_row.iloc[0]["Answer"]
+    else:
+        answer = get_gemini_response(user_query)
 
-st.markdown("""
-    ---
-    **💡 Pro Tip:** Keep exploring different professions and questions to find your perfect career path!
-""")
+    st.write("### Response:")
+    st.write(answer)
+
 
