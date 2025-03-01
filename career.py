@@ -35,7 +35,7 @@ gradient_colors = [
     "#FF9A9E, #FAD0C4",  # Soft red to peach
 ]
 
-# Inject CSS for animated gradient background (10s transition time)
+# Inject CSS for animated gradient background (15s transition time)
 st.markdown(
     f"""
     <style>
