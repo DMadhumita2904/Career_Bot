@@ -71,7 +71,7 @@ st.markdown(
 )
 
 # Adding a GIF image at the top
-st.image("https://www.google.com/url?sa=i&url=https%3A%2F%2Ftenor.com%2Fsearch%2Fcareer-jobs-gifs&psig=AOvVaw0CyEK9iUBcv_x5tDyHpJ40&ust=1740894606883000&source=images&cd=vfe&opi=89978449&ved=0CBMQjRxqFwoTCPig7feX6IsDFQAAAAAdAAAAABAo", use_column_width=True)
+st.image("https://www.google.com/url?sa=i&url=https%3A%2F%2Ftenor.com%2Fsearch%2Fcareer-jobs-gifs&psig=AOvVaw0CyEK9iUBcv_x5tDyHpJ40&ust=1740894606883000&source=images&cd=vfe&opi=89978449&ved=0CBMQjRxqFwoTCPig7feX6IsDFQAAAAAdAAAAABAo", use_container_width=True)
 
 st.markdown('<p class="main-title">Career Guidance Chatbot 🎯</p>', unsafe_allow_html=True)
 st.markdown('<p class="subtext">Your personal AI career advisor 🤖</p>', unsafe_allow_html=True)
