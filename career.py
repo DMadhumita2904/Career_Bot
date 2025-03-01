@@ -21,21 +21,13 @@ def get_gemini_response(user_input):
 
 # More gradient colors for dynamic background
 gradient_colors = [
-    "#FFDEE9, #B5FFFC",  # Light pink to blue
-    "#A1C4FD, #C2E9FB",  # Soft blue to white
-    "#FFEFBA, #FFFFFF",  # Light yellow to white
-    "#FAACA8, #DDD6F3",  # Soft red to purple
-    "#FAD961, #F76B1C",  # Orange gradient
-    "#FDCB82, #FF9A8B",  # Peach to soft pink
-    "#A18CD1, #FBC2EB",  # Purple to pink
-    "#F7CE68, #FBAB7E",  # Gold to soft orange
-    "#70F570, #49C628",  # Bright green to deep green
-    "#30Cfd0, #330867",  # Turquoise to deep blue
-    "#667eea, #764ba2",  # Blue to purple
-    "#FF9A9E, #FAD0C4",  # Soft red to peach
+    "#FFDEE9, #B5FFFC", "#A1C4FD, #C2E9FB", "#FFEFBA, #FFFFFF",
+    "#FAACA8, #DDD6F3", "#FAD961, #F76B1C", "#FDCB82, #FF9A8B",
+    "#A18CD1, #FBC2EB", "#F7CE68, #FBAB7E", "#70F570, #49C628",
+    "#30Cfd0, #330867", "#667eea, #764ba2", "#FF9A9E, #FAD0C4"
 ]
 
-# Inject CSS for animated gradient background (15s transition time) and chat bubble styling
+# Inject CSS for animated gradient background and chat bubble styling
 st.markdown(
     f"""
     <style>
@@ -54,35 +46,19 @@ st.markdown(
         91%  {{ background: linear-gradient(135deg, {gradient_colors[11]}); }}
         100% {{ background: linear-gradient(135deg, {gradient_colors[0]}); }}
     }}
-    .stApp {{
-        animation: gradientChange 15s infinite alternate;
-        background-size: cover;
-    }}
+    .stApp {{ animation: gradientChange 15s infinite alternate; background-size: cover; }}
     
-    /* Chat bubbles */
     .bot-message {{
-        background-color: #f0f0f5;
-        color: #333;
-        padding: 10px 15px;
-        border-radius: 10px;
-        width: fit-content;
-        max-width: 70%;
-        margin: 10px 0;
-        text-align: left;
-        font-family: Arial, sans-serif;
+        background-color: #f0f0f5; color: #333; padding: 10px 15px;
+        border-radius: 10px; width: fit-content; max-width: 70%;
+        margin: 10px 0; text-align: left; font-family: Arial, sans-serif;
         box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
     }}
-    
+
     .user-message {{
-        background-color: #0078ff;
-        color: white;
-        padding: 10px 15px;
-        border-radius: 10px;
-        width: fit-content;
-        max-width: 70%;
-        margin: 10px 0 10px auto;
-        text-align: right;
-        font-family: Arial, sans-serif;
+        background-color: #0078ff; color: white; padding: 10px 15px;
+        border-radius: 10px; width: fit-content; max-width: 70%;
+        margin: 10px 0 10px auto; text-align: right; font-family: Arial, sans-serif;
         box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
     }}
     </style>
@@ -90,7 +66,7 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# Display the animated GIF properly with increased height
+# Display animated GIF
 st.markdown(
     """
     <div style="text-align: center;">
@@ -104,19 +80,16 @@ st.markdown(
 st.title("🚀 Career Guidance Chatbot 🎯")
 st.write("Ask me career-related questions!")
 
-# Initialize chat history
+# Initialize session state for chat history and user input
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# User Input
-# Initialize chat history
-if "messages" not in st.session_state:
-    st.session_state.messages = []
+if "user_input" not in st.session_state:
+    st.session_state.user_input = ""
 
-# Form for user input to keep text box at the bottom
 # Form for user input to keep text box at the bottom
 with st.form(key="query_form"):
-    user_query = st.text_input("Type your question here:", value="", key="user_input")
+    user_query = st.text_input("Type your question here:", value=st.session_state.user_input, key="user_query")
     submit_button = st.form_submit_button("Ask")
 
 if submit_button and user_query.strip():
@@ -134,20 +107,10 @@ if submit_button and user_query.strip():
     # Add bot response to session state
     st.session_state.messages.append({"role": "bot", "text": answer})
 
-    # ✅ Fix: Reset input field safely
-    st.session_state["user_input"] = ""
-
-
+    # Clear input after submission
+    st.session_state.user_input = ""
 
 # Display chat messages
-for message in st.session_state.messages:
-    if message["role"] == "user":
-        st.markdown(f'<div class="user-message">{message["text"]}</div>', unsafe_allow_html=True)
-    else:
-        st.markdown(f'<div class="bot-message">{message["text"]}</div>', unsafe_allow_html=True)
-
-
-# Display chat messages with proper alignment
 for message in st.session_state.messages:
     if message["role"] == "user":
         st.markdown(f'<div class="user-message">{message["text"]}</div>', unsafe_allow_html=True)
