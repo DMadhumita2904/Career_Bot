@@ -9,7 +9,7 @@ def load_data():
 
 data = load_data()
 
-# Directly embedding the Gemini API Key
+# Configure Gemini API
 API_KEY = "AIzaSyAYfcTAFba5mn5LXw4UNNfnBvQEgmNbAos"
 genai.configure(api_key=API_KEY)
 
@@ -18,7 +18,7 @@ def get_gemini_response(user_input):
     response = model.generate_content(user_input)
     return response.text if response else "I'm sorry, I couldn't generate a response."
 
-# CSS for background color animation (final working version)
+# CSS for animated background and visible UI
 st.markdown("""
 <style>
 @keyframes backgroundAnimation {
@@ -32,7 +32,6 @@ st.markdown("""
 
 html, body {
     height: 100%;
-    width: 100%;
     margin: 0;
     padding: 0;
 }
@@ -52,33 +51,41 @@ html, body {
     bottom: 0;
     z-index: -1;
     animation: backgroundAnimation 10s infinite alternate;
-    background-color: #FCE4EC;
 }
 
-.stApp > div,
-.stApp > header,
-.stMarkdown,
-.stTextInput,
-.stButton > button {
-    background: transparent !important;
+/* Main content container */
+.st-emotion-cache-1v0mbdj, .stMarkdown {
+    position: relative;
+    z-index: 2;
 }
 
+/* Input field styling */
 .stTextInput>div>div>input {
     background: rgba(255,255,255,0.9) !important;
     border-radius: 20px !important;
     padding: 10px 15px !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
 }
 
-.stMarkdown div[data-testid="stMarkdownContainer"] {
+/* Response container */
+.response-box {
     background: rgba(255,255,255,0.9) !important;
     padding: 20px !important;
     border-radius: 15px !important;
     margin: 20px 0 !important;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1) !important;
+}
+
+/* Header and text visibility */
+h1, h2, h3, p, .stMarkdown {
+    color: #2c3e50 !important;
 }
 
 .center {
     display: flex;
     justify-content: center;
+    z-index: 2;
+    position: relative;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -90,18 +97,26 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# UI Components
+# Chatbot Interface
 st.title("🚀 Career Guidance Chatbot 🎯")
 st.write("💡 Ask me any career-related questions!")
 
 user_query = st.text_input("🔍 Type your question here:")
 
 if user_query:
+    # Check dataset first
     matched_row = data[data["Question"].str.lower() == user_query.lower()]
-    answer = matched_row.iloc[0]["Answer"] if not matched_row.empty else get_gemini_response(user_query)
+    
+    if not matched_row.empty:
+        answer = matched_row.iloc[0]["Answer"]
+    else:
+        # Get Gemini response if not in dataset
+        answer = get_gemini_response(user_query)
+
+    # Display response with styling
     st.markdown(f"""
-    <div style="color: #2c3e50;">
+    <div class="response-box">
         <h3>📝 Response:</h3>
-        <p style="color: #34495e;">{answer}</p>
+        <p>{answer}</p>
     </div>
     """, unsafe_allow_html=True)
