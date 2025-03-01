@@ -19,39 +19,48 @@ def get_gemini_response(user_input):
     response = model.generate_content(user_input)
     return response.text if response else "I'm sorry, I couldn't generate a response."
 
-# Inject JavaScript to change background color dynamically
-st.components.v1.html(
-    """
-    <script>
-    let colors = ["#FCE4EC", "#E3F2FD", "#E8F5E9", "#FFFDE7", "#F3E5F5", "#E0F7FA", "#FFEBEE"];
-    let index = 0;
-    function changeColor() {
-        document.body.style.transition = "background-color 2s ease-in-out";
-        document.body.style.backgroundColor = colors[index];
-        index = (index + 1) % colors.length;
-    }
-    setInterval(changeColor, 3000);
-    </script>
-    """,
-    height=0,
-)
-
-# Reduce GIF size and center it
+# CSS for background color animation
 st.markdown(
     """
-    <div style="text-align: center;">
-        <img src="https://cdn.pixabay.com/animation/2022/10/06/09/57/09-57-46-893_512.gif" width="250">
+    <style>
+    @keyframes backgroundAnimation {
+        0% {background-color: #FCE4EC;}
+        20% {background-color: #E3F2FD;}
+        40% {background-color: #E8F5E9;}
+        60% {background-color: #FFFDE7;}
+        80% {background-color: #F3E5F5;}
+        100% {background-color: #E0F7FA;}
+    }
+    
+    body {
+        animation: backgroundAnimation 10s infinite alternate;
+    }
+    
+    .center {
+        display: flex;
+        justify-content: center;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+# Centered GIF with reduced size
+st.markdown(
+    """
+    <div class="center">
+        <img src="https://cdn.pixabay.com/animation/2022/10/06/09/57/09-57-46-893_512.gif" width="200">
     </div>
     """,
     unsafe_allow_html=True
 )
 
-# Chatbot UI
+# Streamlit UI
 st.title("🚀 Career Guidance Chatbot 🎯")
-st.write("Ask me career-related questions!")
+st.write("💡 Ask me any career-related questions!")
 
 # User Input
-user_query = st.text_input("Type your question here:")
+user_query = st.text_input("🔍 Type your question here:")
 
 if user_query:
     # Check if the question exists in the dataset
@@ -62,5 +71,5 @@ if user_query:
     else:
         answer = get_gemini_response(user_query)
 
-    st.write("### Response:")
+    st.write("### 📝 Response:")
     st.write(answer)
