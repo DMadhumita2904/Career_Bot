@@ -41,7 +41,7 @@ st.markdown("""
 st.markdown(
     """
     <div style="text-align: center;">
-        <img src="https://cdn.pixabay.com/animation/2022/10/06/09/57/09-57-46-893_512.gif" width="250">
+        <img src="https://i.pinimg.com/originals/1f/f3/3e/1ff33ede4825194fdbcf0f9b5e27dc93.gif" width="250">
     </div>
     """,
     unsafe_allow_html=True
