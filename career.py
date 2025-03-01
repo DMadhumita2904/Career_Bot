@@ -21,21 +21,12 @@ def get_gemini_response(user_input):
 
 # More gradient colors for dynamic background
 gradient_colors = [
-    "#FFDEE9, #B5FFFC",  # Light pink to blue
-    "#A1C4FD, #C2E9FB",  # Soft blue to white
-    "#FFEFBA, #FFFFFF",  # Light yellow to white
-    "#FAACA8, #DDD6F3",  # Soft red to purple
-    "#FAD961, #F76B1C",  # Orange gradient
-    "#FDCB82, #FF9A8B",  # Peach to soft pink
-    "#A18CD1, #FBC2EB",  # Purple to pink
-    "#F7CE68, #FBAB7E",  # Gold to soft orange
-    "#70F570, #49C628",  # Bright green to deep green
-    "#30Cfd0, #330867",  # Turquoise to deep blue
-    "#667eea, #764ba2",  # Blue to purple
-    "#FF9A9E, #FAD0C4",  # Soft red to peach
+    "#FFDEE9, #B5FFFC", "#A1C4FD, #C2E9FB", "#FFEFBA, #FFFFFF", "#FAACA8, #DDD6F3",
+    "#FAD961, #F76B1C", "#FDCB82, #FF9A8B", "#A18CD1, #FBC2EB", "#F7CE68, #FBAB7E",
+    "#70F570, #49C628", "#30Cfd0, #330867", "#667eea, #764ba2", "#FF9A9E, #FAD0C4"
 ]
 
-# Inject CSS for animated gradient background (15s transition time) and chat bubble styling
+# Inject CSS for animated background & chat styling
 st.markdown(
     f"""
     <style>
@@ -58,13 +49,13 @@ st.markdown(
         animation: gradientChange 15s infinite alternate;
         background-size: cover;
     }}
-    
+
     /* Chat bubbles */
     .bot-message {{
         background-color: #f0f0f5;
         color: #333;
         padding: 10px 15px;
-        border-radius: 10px;
+        border-radius: 15px;
         width: fit-content;
         max-width: 70%;
         margin: 10px 0;
@@ -72,12 +63,12 @@ st.markdown(
         font-family: Arial, sans-serif;
         box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
     }}
-    
+
     .user-message {{
         background-color: #0078ff;
         color: white;
         padding: 10px 15px;
-        border-radius: 10px;
+        border-radius: 15px;
         width: fit-content;
         max-width: 70%;
         margin: 10px 0 10px auto;
@@ -85,16 +76,23 @@ st.markdown(
         font-family: Arial, sans-serif;
         box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
     }}
+
+    /* Input box styling */
+    .stTextInput > div > div {{
+        border-radius: 25px;
+        padding: 10px;
+        border: 2px solid #0078ff;
+    }}
     </style>
     """,
     unsafe_allow_html=True
 )
 
-# Display the animated GIF properly with increased height
+# Display the animated GIF properly
 st.markdown(
     """
     <div style="text-align: center;">
-        <img src="https://i.pinimg.com/originals/1f/f3/3e/1ff33ede4825194fdbcf0f9b5e27dc93.gif" width="300" height="200">
+        <img src="https://i.pinimg.com/originals/1f/f3/3e/1ff33ede4825194fdbcf0f9b5e27dc93.gif" width="250" height="150">
     </div>
     """,
     unsafe_allow_html=True
@@ -108,8 +106,15 @@ st.write("Ask me career-related questions!")
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# User Input
-user_query = st.text_input("Type your question here:")
+# Display chat messages with proper alignment
+for message in st.session_state.messages:
+    if message["role"] == "user":
+        st.markdown(f'<div class="user-message">{message["text"]}</div>', unsafe_allow_html=True)
+    else:
+        st.markdown(f'<div class="bot-message">{message["text"]}</div>', unsafe_allow_html=True)
+
+# User Input Box at the Bottom
+user_query = st.text_input("Type your message and press Enter", key="user_input")
 
 if user_query:
     # Add user message to session state
@@ -126,9 +131,5 @@ if user_query:
     # Add bot response to session state
     st.session_state.messages.append({"role": "bot", "text": answer})
 
-# Display chat messages with proper alignment
-for message in st.session_state.messages:
-    if message["role"] == "user":
-        st.markdown(f'<div class="user-message">{message["text"]}</div>', unsafe_allow_html=True)
-    else:
-        st.markdown(f'<div class="bot-message">{message["text"]}</div>', unsafe_allow_html=True)
+    # Refresh page to show new messages
+    st.experimental_rerun()
