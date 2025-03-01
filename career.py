@@ -20,7 +20,6 @@ def get_gemini_response(user_input):
     return response.text if response else "I'm sorry, I couldn't generate a response."
 
 # CSS for background color animation
-# Replace the body selector in CSS with .stApp
 st.markdown(
     """
     <style>
@@ -33,19 +32,46 @@ st.markdown(
         100% {background-color: #E0F7FA;}
     }
     
+    html, body, [class*="css"] {
+        min-height: 100vh;
+    }
+    
     .stApp {
-        animation: backgroundAnimation 10s infinite alternate;
+        animation: backgroundAnimation 10s infinite alternate !important;
+        background: transparent !important;
+    }
+    
+    .stApp > header {
+        background-color: transparent !important;
+    }
+    
+    .stApp > div {
+        background-color: transparent !important;
+    }
+    
+    /* Force text elements to maintain visibility */
+    .stMarkdown, .stTextInput, .stButton > button, .stAlert {
+        color: #333333 !important;
         background: transparent !important;
     }
     
     .center {
         display: flex;
         justify-content: center;
+        background: transparent !important;
+    }
+    
+    /* Input field styling */
+    .stTextInput>div>div>input {
+        background: rgba(255,255,255,0.9) !important;
+        border-radius: 20px !important;
+        padding: 10px 15px !important;
     }
     </style>
     """,
     unsafe_allow_html=True
 )
+
 # Centered GIF with reduced size
 st.markdown(
     """
@@ -72,5 +98,11 @@ if user_query:
     else:
         answer = get_gemini_response(user_query)
 
-    st.write("### 📝 Response:")
-    st.write(answer)
+    # Response container with styling
+    st.markdown(
+        f'<div style="background: rgba(255,255,255,0.9); '
+        f'padding: 20px; border-radius: 15px; margin: 20px 0;">'
+        f'<h3 style="color: #2c3e50;">📝 Response:</h3>'
+        f'<p style="color: #34495e;">{answer}</p></div>',
+        unsafe_allow_html=True
+    )
