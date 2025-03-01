@@ -67,7 +67,7 @@ st.markdown(
 st.markdown(
     """
     <div style="text-align: center;">
-        <img src="https://i.pinimg.com/originals/1f/f3/3e/1ff33ede4825194fdbcf0f9b5e27dc93.gif" width="300" height="300">
+        <img src="https://i.pinimg.com/originals/1f/f3/3e/1ff33ede4825194fdbcf0f9b5e27dc93.gif" width="300">
     </div>
     """,
     unsafe_allow_html=True
