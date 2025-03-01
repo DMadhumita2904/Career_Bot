@@ -3,8 +3,12 @@ import pandas as pd
 import google.generativeai as genai
 import os
 
-# Load the dataset
-df = pd.read_csv("profession_questions_answers.csv")
+# Load the dataset with caching
+@st.cache_data
+def load_data():
+    return pd.read_csv("profession_questions_answers.csv")
+
+df = load_data()
 
 def get_predefined_answer(profession, question):
     """Fetch the predefined answer from the dataset."""
