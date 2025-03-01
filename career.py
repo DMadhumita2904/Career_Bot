@@ -19,19 +19,19 @@ def get_gemini_response(user_input):
     response = model.generate_content(user_input)
     return response.text if response else "I'm sorry, I couldn't generate a response."
 
-# Inject CSS for smooth animated background
+# Inject CSS for a fast, dark-themed animated background
 st.markdown("""
     <style>
     @keyframes gradientChange {
-        0% { background: linear-gradient(135deg, #FCE4EC, #E3F2FD); }
-        25% { background: linear-gradient(135deg, #E8F5E9, #FFFDE7); }
-        50% { background: linear-gradient(135deg, #F3E5F5, #E0F7FA); }
-        75% { background: linear-gradient(135deg, #FFEBEE, #E3F2FD); }
-        100% { background: linear-gradient(135deg, #FCE4EC, #E3F2FD); }
+        0% { background: linear-gradient(135deg, #1a1a2e, #16213e); }
+        25% { background: linear-gradient(135deg, #0f3460, #533483); }
+        50% { background: linear-gradient(135deg, #232526, #414345); }
+        75% { background: linear-gradient(135deg, #141E30, #243B55); }
+        100% { background: linear-gradient(135deg, #1a1a2e, #16213e); }
     }
     
     .stApp {
-        animation: gradientChange 8s infinite alternate;
+        animation: gradientChange 4s infinite alternate;
         background-size: cover;
     }
     </style>
