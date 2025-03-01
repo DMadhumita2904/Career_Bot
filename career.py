@@ -19,84 +19,9 @@ def get_gemini_response(user_input):
     response = model.generate_content(user_input)
     return response.text if response else "I'm sorry, I couldn't generate a response."
 
-# More gradient colors for dynamic background
-gradient_colors = [
-    "#FFDEE9, #B5FFFC", "#A1C4FD, #C2E9FB", "#FFEFBA, #FFFFFF", "#FAACA8, #DDD6F3",
-    "#FAD961, #F76B1C", "#FDCB82, #FF9A8B", "#A18CD1, #FBC2EB", "#F7CE68, #FBAB7E",
-    "#70F570, #49C628", "#30Cfd0, #330867", "#667eea, #764ba2", "#FF9A9E, #FAD0C4"
-]
-
-# Inject CSS for animated background & chat styling
-st.markdown(
-    f"""
-    <style>
-    @keyframes gradientChange {{
-        0%   {{ background: linear-gradient(135deg, {gradient_colors[0]}); }}
-        8%   {{ background: linear-gradient(135deg, {gradient_colors[1]}); }}
-        16%  {{ background: linear-gradient(135deg, {gradient_colors[2]}); }}
-        25%  {{ background: linear-gradient(135deg, {gradient_colors[3]}); }}
-        33%  {{ background: linear-gradient(135deg, {gradient_colors[4]}); }}
-        41%  {{ background: linear-gradient(135deg, {gradient_colors[5]}); }}
-        50%  {{ background: linear-gradient(135deg, {gradient_colors[6]}); }}
-        58%  {{ background: linear-gradient(135deg, {gradient_colors[7]}); }}
-        66%  {{ background: linear-gradient(135deg, {gradient_colors[8]}); }}
-        75%  {{ background: linear-gradient(135deg, {gradient_colors[9]}); }}
-        83%  {{ background: linear-gradient(135deg, {gradient_colors[10]}); }}
-        91%  {{ background: linear-gradient(135deg, {gradient_colors[11]}); }}
-        100% {{ background: linear-gradient(135deg, {gradient_colors[0]}); }}
-    }}
-    .stApp {{
-        animation: gradientChange 15s infinite alternate;
-        background-size: cover;
-    }}
-
-    /* Chat bubbles */
-    .bot-message {{
-        background-color: #f0f0f5;
-        color: #333;
-        padding: 10px 15px;
-        border-radius: 15px;
-        width: fit-content;
-        max-width: 70%;
-        margin: 10px 0;
-        text-align: left;
-        font-family: Arial, sans-serif;
-        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-    }}
-
-    .user-message {{
-        background-color: #0078ff;
-        color: white;
-        padding: 10px 15px;
-        border-radius: 15px;
-        width: fit-content;
-        max-width: 70%;
-        margin: 10px 0 10px auto;
-        text-align: right;
-        font-family: Arial, sans-serif;
-        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
-    }}
-
-    /* Input box styling */
-    .stTextInput > div > div {{
-        border-radius: 25px;
-        padding: 10px;
-        border: 2px solid #0078ff;
-    }}
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-
-# Display the animated GIF properly
-st.markdown(
-    """
-    <div style="text-align: center;">
-        <img src="https://i.pinimg.com/originals/1f/f3/3e/1ff33ede4825194fdbcf0f9b5e27dc93.gif" width="250" height="150">
-    </div>
-    """,
-    unsafe_allow_html=True
-)
+# Callback function to clear input field
+def clear_input():
+    st.session_state["user_input"] = ""
 
 # Chatbot UI
 st.title("🚀 Career Guidance Chatbot 🎯")
@@ -106,15 +31,15 @@ st.write("Ask me career-related questions!")
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# Display chat messages with proper alignment
+# Display chat messages
 for message in st.session_state.messages:
     if message["role"] == "user":
         st.markdown(f'<div class="user-message">{message["text"]}</div>', unsafe_allow_html=True)
     else:
         st.markdown(f'<div class="bot-message">{message["text"]}</div>', unsafe_allow_html=True)
 
-# Fix: Use a unique key to prevent duplicate key error
-user_query = st.text_input("Type your message and press Enter", key="new_user_input")
+# Use a text input with an on-change callback to clear input
+user_query = st.text_input("Type your message and press Enter", key="user_input", on_change=clear_input)
 
 if user_query:
     # Add user message to session state
@@ -131,6 +56,5 @@ if user_query:
     # Add bot response to session state
     st.session_state.messages.append({"role": "bot", "text": answer})
 
-    # **Fix:** Clear input field properly
-    st.session_state["new_user_input"] = ""
-    st.rerun()  # Refresh UI for real-time chat experience
+    # Force rerun to display messages
+    st.rerun()
