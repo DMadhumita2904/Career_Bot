@@ -109,9 +109,16 @@ if "messages" not in st.session_state:
     st.session_state.messages = []
 
 # User Input
-user_query = st.text_input("Type your question here:")
+# Initialize chat history
+if "messages" not in st.session_state:
+    st.session_state.messages = []
 
-if user_query:
+# Form for user input to keep text box at the bottom
+with st.form(key="query_form"):
+    user_query = st.text_input("Type your question here:", value="", key="user_input")
+    submit_button = st.form_submit_button("Ask")
+
+if submit_button and user_query.strip():
     # Add user message to session state
     st.session_state.messages.append({"role": "user", "text": user_query})
 
@@ -125,6 +132,17 @@ if user_query:
 
     # Add bot response to session state
     st.session_state.messages.append({"role": "bot", "text": answer})
+
+    # Clear input after submission
+    st.session_state.user_input = ""
+
+# Display chat messages
+for message in st.session_state.messages:
+    if message["role"] == "user":
+        st.markdown(f'<div class="user-message">{message["text"]}</div>', unsafe_allow_html=True)
+    else:
+        st.markdown(f'<div class="bot-message">{message["text"]}</div>', unsafe_allow_html=True)
+
 
 # Display chat messages with proper alignment
 for message in st.session_state.messages:
