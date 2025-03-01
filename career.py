@@ -55,7 +55,7 @@ st.markdown(
         100% {{ background: linear-gradient(135deg, {gradient_colors[0]}); }}
     }}
     .stApp {{
-        animation: gradientChange 10s infinite alternate;
+        animation: gradientChange 15s infinite alternate;
         background-size: cover;
     }}
     </style>
