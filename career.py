@@ -20,7 +20,7 @@ def get_predefined_answer(profession, question):
 
 # Set up Gemini API with proper configuration
 try:
-    genai.configure(api_key=st.secrets["GEMINI_API_KEY"])  # Use Streamlit secrets management
+    genai.configure(api_key=st.secrets["AIzaSyAYfcTAFba5mn5LXw4UNNfnBvQEgmNbAos"])  # Use Streamlit secrets management
 except Exception as e:
     st.error("Error configuring Gemini API. Please check your API key configuration.")
     st.stop()
