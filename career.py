@@ -18,28 +18,29 @@ def get_predefined_answer(profession, question):
     row = df[(df["Profession"] == profession) & (df["Question"] == question)]
     return row["Answer"].values[0] if not row.empty else None
 
-# Set up Gemini API with proper configuration
+# Set up Gemini API directly with your key
+YOUR_API_KEY = "AIzaSyAYfcTAFba5mn5LXw4UNNfnBvQEgmNbAos"  # 🔴 Replace with your actual key
 try:
-    genai.configure(api_key=st.secrets["AIzaSyAYfcTAFba5mn5LXw4UNNfnBvQEgmNbAos"])  # Use Streamlit secrets management
+    genai.configure(api_key=YOUR_API_KEY)
 except Exception as e:
-    st.error("Error configuring Gemini API. Please check your API key configuration.")
+    st.error(f"API configuration failed: {str(e)}")
     st.stop()
 
-@st.cache_data(ttl=3600)  # Cache responses for 1 hour
+@st.cache_data(ttl=3600)
 def get_gemini_response(question):
     """Fetch additional insights from Gemini AI with error handling."""
     try:
-        model = genai.GenerativeModel("gemini-pro")  # Use faster model
+        model = genai.GenerativeModel("gemini-pro")
         response = model.generate_content(
             question,
             generation_config={"temperature": 0.5},
-            request_options={"timeout": 10}  # 10-second timeout
+            request_options={"timeout": 10}
         )
         return response.text
     except Exception as e:
-        return f"⚠️ Couldn't fetch additional insights: {str(e)}"
+        return f"⚠️ Error: {str(e)}"
 
-# Streamlit UI with enhanced design
+# Streamlit UI remains the same
 st.markdown("""
     <style>
     .main {background-color: #f4f4f4;}
@@ -66,10 +67,8 @@ question = st.selectbox("🔹 Choose a question:", df[df["Profession"] == profes
 if st.button("✨ Get Answer ✨"):
     start_time = datetime.now()
     
-    # Get predefined answer immediately
     predefined_answer = get_predefined_answer(profession, question)
     
-    # Display results in columns
     col1, col2 = st.columns(2)
     
     with col1:
