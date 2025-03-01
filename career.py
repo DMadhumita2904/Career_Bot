@@ -20,7 +20,7 @@ def get_gemini_response(user_input):
     return response.text if response else "I'm sorry, I couldn't generate a response."
 
 # Streamlit UI
-st.image("https://media.giphy.com/media/xT9IgzoKnwFNmISR8I/giphy-downsized.gif", use_container_width=True)
+st.image("https://cdn.pixabay.com/animation/2022/10/06/09/57/09-57-46-893_512.gif", use_container_width=True)
 st.title("Career Guidance Chatbot")
 st.write("Ask me career-related questions!")
 
