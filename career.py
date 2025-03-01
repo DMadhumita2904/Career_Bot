@@ -132,4 +132,5 @@ if user_query:
     st.session_state.messages.append({"role": "bot", "text": answer})
 
     # Refresh page to show new messages
-    st.experimental_rerun()
+    st.text_input("Type your message and press Enter", key="user_input", value="", on_change=None)
+
