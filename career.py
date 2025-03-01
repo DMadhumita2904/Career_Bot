@@ -35,7 +35,7 @@ gradient_colors = [
     "#FF9A9E, #FAD0C4",  # Soft red to peach
 ]
 
-# Inject CSS for animated gradient background
+# Inject CSS for animated gradient background (10s transition time)
 st.markdown(
     f"""
     <style>
@@ -55,7 +55,7 @@ st.markdown(
         100% {{ background: linear-gradient(135deg, {gradient_colors[0]}); }}
     }}
     .stApp {{
-        animation: gradientChange 8s infinite alternate;
+        animation: gradientChange 10s infinite alternate;
         background-size: cover;
     }}
     </style>
@@ -63,11 +63,11 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# Display the animated GIF properly
+# Display the animated GIF properly with increased height
 st.markdown(
     """
     <div style="text-align: center;">
-        <img src="https://i.pinimg.com/originals/1f/f3/3e/1ff33ede4825194fdbcf0f9b5e27dc93.gif" width="300">
+        <img src="https://i.pinimg.com/originals/1f/f3/3e/1ff33ede4825194fdbcf0f9b5e27dc93.gif" width="300" height="200">
     </div>
     """,
     unsafe_allow_html=True
